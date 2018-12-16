@@ -5,10 +5,19 @@ import _ from "lodash";
 
 export const fetchPostsAndUser = () => async (dispatch, getState) => {
   await dispatch(fetchPosts());
-  _.uniq(_.map(getState().posts, "userId")).forEach(id =>
-    dispatch(fetchUser(id))
-  );
+  _.chain(getState().posts)
+    .map("userId")
+    .uniq()
+    .forEach(id => dispatch(fetchUser(id)))
+    .value();
 };
+
+// export const fetchPostsAndUser = () => async (dispatch, getState) => {
+//   await dispatch(fetchPosts());
+//   _.uniq(_.map(getState().posts, "userId")).forEach(id =>
+//     dispatch(fetchUser(id))
+//   );
+// };
 
 //fetchPost action creator
 export const fetchPosts = () => async dispatch => {
